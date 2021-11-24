@@ -1,16 +1,20 @@
+let Atouch = Array();
+let ok = false;
+let TouchLowerCase;
 window.addEventListener("keydown", (e) =>{
-    if (e.key === 'q'||e.key === 's' || e.key === 'd' || e.key === 'f' || e.key === 'g' || e.key === 'h' || e.key === 'j'|| e.key === 'k' || e.key === 'l') {
-        sound(e.key);
-    }
+        verif(e.key);
 },
 false);
 const elements = document.querySelectorAll('div.key');
 for (let i = 0; i < elements.length; i++) {
     const element = elements[i];
+    const childs = elements[i].childNodes;
+    Atouch.push(childs[1].textContent.toLowerCase()); 
     element.addEventListener('click', (event) =>{
         const childs = elements[i].childNodes;
-        const letter = childs[1].textContent.toLowerCase();
-        sound(letter);
+        TouchLowerCase = childs[1].textContent.toLowerCase()
+        Atouch.push(childs[1].textContent.toLowerCase()); 
+        verif(TouchLowerCase);
     });
 }
 let sound = (key)=>{
@@ -30,4 +34,14 @@ let sound = (key)=>{
         body.classList.remove(key);
         DivTouch[0].classList.remove('playing');
     }, 500)
+}
+const verif = (pressedTouch) =>{
+    for (let k = 0; k < Atouch.length; k++) {
+        const sTouch = Atouch[k];
+        if (pressedTouch === sTouch) {
+            ok = true;
+            sound(pressedTouch);
+            return
+        }
+    }
 }
