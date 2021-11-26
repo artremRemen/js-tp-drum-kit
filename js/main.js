@@ -1,47 +1,42 @@
-let Atouch = Array();
-let ok = false;
-let TouchLowerCase;
-window.addEventListener("keydown", (e) =>{
-        verif(e.key);
-},
-false);
-const elements = document.querySelectorAll('div.key');
-for (let i = 0; i < elements.length; i++) {
-    const element = elements[i];
-    const childs = elements[i].childNodes;
-    Atouch.push(childs[1].textContent.toLowerCase()); 
-    element.addEventListener('click', (event) =>{
-        const childs = elements[i].childNodes;
-        TouchLowerCase = childs[1].textContent.toLowerCase()
-        Atouch.push(childs[1].textContent.toLowerCase()); 
-        verif(TouchLowerCase);
-    });
-}
-let sound = (key)=>{
-    const body = document.body;
-    const AudioFile = document.querySelector(`audio[data-key="${key}"]`);
-    const DivTouch = document.querySelectorAll(`div[data-key="${key}"]`);
-    DivTouch[0].classList.add(key);
-    DivTouch[0].classList.add('playing');
-    body.classList.add(key);
-    AudioFile.currentTime = 0
-    AudioFile.play()
-    AudioFile.addEventListener("ended", function() 
-        {
-            DivTouch[0].classList.remove(key);
-        });
-    setTimeout( () =>{
-        body.classList.remove(key);
-        DivTouch[0].classList.remove('playing');
-    }, 500)
-}
-const verif = (pressedTouch) =>{
-    for (let k = 0; k < Atouch.length; k++) {
-        const sTouch = Atouch[k];
-        if (pressedTouch === sTouch) {
-            ok = true;
-            sound(pressedTouch);
-            return
+(() =>{
+    const drumpkit = {
+        init(){
+             this.Atouch = Array();
+            body = document.body;
+            window.addEventListener("keydown", (e) =>{
+                    verif(e.key);
+            },
+            false);
+            this.elements = document.querySelectorAll('div.key');
+            for (let i = 0; i < this.elements.length; i++) {
+                this.Atouch.push(this.elements[i].getAttribute('data-key')); 
+                this.elements[i].addEventListener('click', (event) =>{
+                    this.key = event.currentTarget.getAttribute('data-key')
+                    verif(this.key);
+                });
+            }
+            sound = (key)=>{
+                this.AudioFile = document.querySelector(`audio[data-key="${key}"]`);
+                DivTouch=document.querySelector(`div[data-key="${key}"]`);
+                DivTouch.classList.add('playing');
+                body.classList.add(key);
+                this.AudioFile.currentTime = 0
+                this.AudioFile.play()
+                DivTouch.addEventListener("transitionend", function() 
+                    {
+                        body.classList.remove(key);
+                        DivTouch.classList.remove('playing');
+                    });
+            }
+            const verif = (pressedTouch) =>{
+                this.pressedTouch = pressedTouch
+                    if ( this.Atouch.includes(this.pressedTouch)) {
+                        sound(this.pressedTouch);
+                        return
+                    }
+            }
         }
     }
-}
+    
+    drumpkit.init();
+})();
